@@ -29,7 +29,7 @@ const HomePage = () => {
     <>
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} />}
-      <MoviesList movies={movies} />
+      <MoviesList title={'Trending films'} movies={movies} />
     </>
   );
 };

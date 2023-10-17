@@ -4,6 +4,7 @@ import MoviesList from 'components/Home/MoviesList';
 import { fetchSearchMovie } from 'components/services/api-movies';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import css from './Details.module.css';
 
 const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,13 +40,22 @@ const MoviesPage = () => {
     <div>
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} />}
-      <form onSubmit={handleSearchSubmit}>
-        <label>
-          <input type="text" name="searchInpurt" required />
+      <form className={css.form} onSubmit={handleSearchSubmit}>
+        <label className={css.lebel}>
+          <input
+            className={css.input}
+            type="text"
+            name="searchInpurt"
+            required
+          />
         </label>
-        <button type="submit">Search</button>
+        <button className={css.formBtn} type="submit">
+          Search
+        </button>
       </form>
-      {movies !== null && <MoviesList movies={movies} />}
+      {movies !== null && (
+        <MoviesList title={'Searched films'} movies={movies} />
+      )}
     </div>
   );
 };

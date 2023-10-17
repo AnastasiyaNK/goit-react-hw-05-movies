@@ -10,6 +10,7 @@ const CastPage = () => {
   const [cast, setCast] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const getfetchCast = async () => {
       try {
@@ -24,6 +25,15 @@ const CastPage = () => {
     };
     getfetchCast();
   }, [movieId]);
+
+  useEffect(() => {
+    if (cast === null) return;
+
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth',
+    });
+  }, [cast]);
 
   return (
     <div className={css.castContainer}>
@@ -40,10 +50,9 @@ const CastPage = () => {
                 alt={actor.original_name}
               />
               <h3 className={css.castTitle}>{actor.original_name}</h3>
-              <p className={css.castText}>Character:{actor.character}</p>
+              <p className={css.castText}>Character: {actor.character}</p>
             </li>
           ))}
-          <li></li>
         </ul>
       )}
     </div>

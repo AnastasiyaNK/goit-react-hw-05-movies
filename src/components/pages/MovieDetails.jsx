@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import css from './Details.module.css';
-import { Link, Route, Routes, useParams } from 'react-router-dom';
+import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom';
 
 import { fetchMoviesDetails } from 'components/services/api-movies';
 import Loader from 'components/Home/Loader';
 import ErrorMessage from 'components/Home/ErrorMessage';
-import CastPage from './CastPage';
-import ReviewsPage from './ReviewsPage';
+
+const CastPage = lazy(() => import('./CastPage'));
+const ReviewsPage = lazy(() => import('./ReviewsPage'));
 
 const MovieDetails = () => {
+  const location = useLocation();
+  const backLinkHref = useRef(location.state?.from ?? '/');
   const { movieId } = useParams();
   const [movieData, setMovieData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +34,9 @@ const MovieDetails = () => {
 
   return (
     <div className={css.container}>
+      <Link className={css.goBackLink} to={backLinkHref.current}>
+        Go back
+      </Link>
       {isLoading && <Loader />}
       {error && <ErrorMessage message={error} />}
 
@@ -58,6 +64,7 @@ const MovieDetails = () => {
           </div>
         </div>
       )}
+
       <Link className={css.castLink} to="cast">
         Cast
       </Link>
@@ -65,10 +72,12 @@ const MovieDetails = () => {
         Reviews
       </Link>
       <div>
-        <Routes>
-          <Route path="cast" element={<CastPage />} />
-          <Route path="reviews" element={<ReviewsPage />} />
-        </Routes>
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route path="cast" element={<CastPage />} />
+            <Route path="reviews" element={<ReviewsPage />} />
+          </Routes>
+        </Suspense>
       </div>
     </div>
   );

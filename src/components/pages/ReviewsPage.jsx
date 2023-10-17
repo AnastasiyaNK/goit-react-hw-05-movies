@@ -8,7 +8,6 @@ import css from './Details.module.css';
 const ReviewsPage = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState(null);
-  console.log(reviews);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -26,6 +25,14 @@ const ReviewsPage = () => {
     };
     getfetchReviews();
   }, [movieId]);
+
+  useEffect(() => {
+    if (!reviews) return;
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth',
+    });
+  }, [reviews]);
   return (
     <div>
       {isLoading && <Loader />}
